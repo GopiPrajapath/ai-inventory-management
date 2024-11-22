@@ -100,7 +100,7 @@ For any inquiries or feedback, feel free to reach out:
 
 - **Author**: Gopi Prajapath
 - **Email**: gopiprajapathh@gmail.com
-- **LinkedIn**: [linkedin.com/in/gopi-prajapath](linkedin.com/in/gopi-prajapath-581435326)
+- **LinkedIn**: [linkedin.com/in/gopi-prajapath-581435326](linkedin.com/in/gopi-prajapath-581435326)
 
 ---
 
