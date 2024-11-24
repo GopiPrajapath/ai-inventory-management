@@ -10,13 +10,14 @@ import LoginRegistration from './pages/login-registration';
 import HelpAndSupport from './pages/help-and-support';
 import About from './pages/about';
 import Settings from './pages/settings';
+import PricingPage from './pages/pricing-page';
 function App() {
   return (
 
     <div className="App">
       <BrowserRouter>
       <Routes>
-        <Route index element={<HomePage />} />
+        <Route path ='/homepage' element={<HomePage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/inventory" element={<InventoryManagement />} />
         <Route path="/ai-insights" element={<AIInsights />} />
@@ -26,6 +27,7 @@ function App() {
         <Route path="/login" element={<LoginRegistration />} />
         <Route path="/help" element={<HelpAndSupport />} />
         <Route path="/about" element={<About />} />
+        <Route path="/pricing" element={<PricingPage/>} />
       </Routes>
       </BrowserRouter>
     </div>

@@ -8,6 +8,8 @@ import { Switch } from "../components/ui/switch"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { Users, Bell, Database, Brain } from 'lucide-react'
+import Sidebar from '../components/ui/HeaderandSideBar'; 
+
 
 export default function Settings() {
   const [users, setUsers] = useState([
@@ -30,9 +32,14 @@ export default function Settings() {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Settings</h1>
+    
+  <Sidebar>
+    <div className="container mx-auto px-6 py-8">
+          {/* Settings Content */}
+          <h1 className="text-3xl font-semibold mb-6">Settings</h1>
+      <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
 
+      <div className="container mx-auto px-6 py-8">
       <Tabs defaultValue="user-management" className="space-y-4">
         <TabsList>
           <TabsTrigger value="user-management">User Management</TabsTrigger>
@@ -231,6 +238,10 @@ export default function Settings() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+      </main>
+      </div>
+      </Sidebar>
+
   )
 }

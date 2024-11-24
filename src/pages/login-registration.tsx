@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
 import { LogIn, UserPlus, KeyRound } from 'lucide-react'
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginRegistration() {
   const [email, setEmail] = useState('')
@@ -17,6 +18,7 @@ export default function LoginRegistration() {
   const [role, setRole] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const navigate = useNavigate();
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,6 +27,9 @@ export default function LoginRegistration() {
     // For demonstration purposes, we'll just show a success message
     setSuccess('Successfully signed in!')
     setError('')
+    
+    // Redirect to dashboard after successful login
+    navigate('/dashboard')
   }
 
   const handleSignUp = (e: React.FormEvent) => {

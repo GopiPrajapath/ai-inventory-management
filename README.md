@@ -1,109 +1,50 @@
-Great! Let’s update the README to reflect that your project uses React, Vite, and TypeScript. Here’s the revised version:
+# React + TypeScript + Vite
 
----
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-# AI Inventory Management
+Currently, two official plugins are available:
 
-Project Logo   <!-- Add a logo if you have one -->
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Table of Contents
-- [AI Inventory Management](#ai-inventory-management)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Features](#features)
-  - [Technologies Used](#technologies-used)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Contact](#contact)
+## Expanding the ESLint configuration
 
-## Introduction
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-AI Inventory Management is a smart inventory tracking system that leverages artificial intelligence to optimize stock management and reduce waste. This project aims to help businesses maintain optimal inventory levels, forecast demand, and automate reorder processes, ensuring that products are always available when needed.
+- Configure the top-level `parserOptions` property like this:
 
-## Features
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-- **Real-time Inventory Tracking**: Monitor stock levels in real-time and receive alerts for low inventory.
-- **Demand Forecasting**: Use AI algorithms to predict future inventory needs based on historical data.
-- **Automated Reordering**: Automatically generate purchase orders when stock falls below predefined thresholds.
-- **User-Friendly Interface**: An intuitive dashboard for easy navigation and management of inventory.
-- **Reporting and Analytics**: Generate detailed reports on inventory performance and trends.
-- **Multi-Location Support**: Manage inventory across multiple locations seamlessly.
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-## Technologies Used
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
 
-- **Frontend**:
-  - **Framework**: React
-  - **Build Tool**: Vite
-  - **Language**: TypeScript
-  
-- **Backend**: 
-  - **Framework**: Flask
-  - **Database**: PostgreSQL
-  - **AI/ML Libraries**: TensorFlow, Scikit-learn
-  
-- **Version Control**: Git, GitHub
-
-## Installation
-
-To get started with the AI Inventory Management system, follow these steps:
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/GopiPrajapath/ai-inventory-management.git
-   cd ai-inventory-management
-   ```
-
-
-2. **Install Frontend Dependencies**:
-   - Navigate to the frontend directory and install the necessary packages:
-   ```bash
-   cd ../frontend
-   npm install
-   ```
-
-
-
-4. **Start the Application**:
-   ```
-   - In the frontend:
-   ```bash
-   cd ../frontend
-   npm run dev
-   ```
-
-## Usage
-
-After starting the application, navigate to `http://localhost:5173` (or the port specified by Vite) in your web browser to access the dashboard. You can:
-- Add new products to the inventory.
-- View current stock levels and set reorder points.
-- Analyze inventory data through reports and dashboards.
-
-## Contributing
-
-Contributions are welcome! If you have suggestions for improvements or want to report a bug, please create an issue or submit a pull request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a pull request
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-For any inquiries or feedback, feel free to reach out:
-
-- **Author**: Gopi Prajapath
-- **Email**: gopiprajapathh@gmail.com
-- **LinkedIn**: [linkedin.com/in/gopi-prajapath-581435326](linkedin.com/in/gopi-prajapath-581435326)
-
----
-
-Feel free to customize any links, descriptions, or sections as needed to better fit your project!Great! Let’s update the README to reflect that your project uses React, Vite, and TypeScript. Here’s the revised version:
-
----
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```
