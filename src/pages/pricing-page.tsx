@@ -79,6 +79,7 @@ export default function PricingPage() {
         <button
           className={`w-16 h-8 rounded-full p-1 ${annualBilling ? 'bg-primary' : 'bg-gray-300'}`}
           onClick={() => setAnnualBilling(!annualBilling)}
+          aria-label={`Switch to ${annualBilling ? 'monthly' : 'annual'} billing`}
         >
           <div className={`w-6 h-6 rounded-full bg-white transform duration-300 ease-in-out ${annualBilling ? 'translate-x-8' : ''}`} />
         </button>

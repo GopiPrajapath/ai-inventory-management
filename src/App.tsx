@@ -11,6 +11,8 @@ import HelpAndSupport from './pages/help-and-support';
 import About from './pages/about';
 import Settings from './pages/settings';
 import PricingPage from './pages/pricing-page';
+import OrderManagement from './pages/order';
+import ReportPage from './pages/Reports';
 function App() {
   return (
 
@@ -28,7 +30,9 @@ function App() {
         <Route path="/login" element={<LoginRegistration />} />
         <Route path="/help" element={<HelpAndSupport />} />
         <Route path="/about" element={<About />} />
+        <Route path="/orders" element={<OrderManagement/>}/>
         <Route path="/pricing" element={<PricingPage/>} />
+        <Route path="/reports" element={<ReportPage/>} />
       </Routes>
       </BrowserRouter>
     </div>

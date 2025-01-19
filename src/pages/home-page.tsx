@@ -11,29 +11,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
 
 export default function Homepage() {
   return (
+
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
       <header className="container mx-auto px-4 py-6 flex justify-between items-center">
         <div className="flex items-center space-x-4">
-        <OptimizedImage src={logoImage} alt="InventoryAI Logo" width={40} height={40} />
+          <OptimizedImage src={logoImage} alt="InventoryAI Logo" width={40} height={40} />
           <span className="text-2xl font-bold text-blue-600">InventoryAI</span>
         </div>
         <nav className="hidden md:flex space-x-6">
-          <a href="#" className="text-gray-600 hover:text-blue-600">Home</a>
-          <a href="#features" className="text-gray-600 hover:text-blue-600">Features</a>
-          <Link to = '/pricing'>
-          <a href="#" className="text-gray-600 hover:text-blue-600">Pricing</a>
-          </Link>
-          <Link to = '/about'>
-          <a href="#" className="text-gray-600 hover:text-blue-600">About Us</a>
-          </Link>
-          <a href="#" className="text-gray-600 hover:text-blue-600">Contact</a>
+          <Link to="/" className="text-gray-600 hover:text-blue-600">Home</Link>
+          <Link to="/#features" className="text-gray-600 hover:text-blue-600">Features</Link>
+          <Link to="/pricing" className="text-gray-600 hover:text-blue-600">Pricing</Link>
+          <Link to="/about" className="text-gray-600 hover:text-blue-600">About Us</Link>
+          <Link to="/contact" className="text-gray-600 hover:text-blue-600">Contact</Link>
         </nav>
- 
         <Link to="/login">
-            <Button>Get Started</Button>
+          <Button>Get Started</Button>
         </Link>
-        
       </header>
 
       {/* Hero Section */}
@@ -206,10 +201,10 @@ export default function Homepage() {
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:underline">Home</a></li>
-                <li><a href="#features" className="hover:underline">Features</a></li>
-                <li><a href="#" className="hover:underline">Pricing</a></li>
-                <li><a href="#" className="hover:underline">About Us</a></li>
+                <li><Link to="/" className="hover:underline">Home</Link></li>
+                <li><Link to="/#features" className="hover:underline">Features</Link></li>
+                <li><Link to="/pricing" className="hover:underline">Pricing</Link></li>
+                <li><Link to="/about" className="hover:underline">About Us</Link></li>
               </ul>
             </div>
             <div>
