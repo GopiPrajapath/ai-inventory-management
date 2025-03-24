@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, FormEvent } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card"
 import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
@@ -9,45 +9,81 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
 import { LogIn, UserPlus, KeyRound } from 'lucide-react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+
+// API base URL - should be in an environment variable in production
+const API_URL = 'http://localhost:3000/api';
+
+// Define user role type
+type UserRole = 'user' | 'manager' | 'admin';
 
 export default function LoginRegistration() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  const [role, setRole] = useState('')
+  const [role, setRole] = useState<UserRole>('user')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: FormEvent) => {
     e.preventDefault()
-    // Here you would typically make an API call to authenticate the user
-    console.log('Sign in attempt with:', { email, password })
-    // For demonstration purposes, we'll just show a success message
-    setSuccess('Successfully signed in!')
+    setLoading(true)
     setError('')
+    setSuccess('')
     
-    // Redirect to dashboard after successful login
-    navigate('/dashboard')
+    try {
+      const response = await axios.post(`${API_URL}/auth/signin`, { email, password })
+      
+      // Store token in localStorage
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      
+      setSuccess('Successfully signed in!')
+      
+      // Redirect to dashboard after successful login
+      setTimeout(() => {
+        navigate('/dashboard')
+      }, 1000)
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'An error occurred during sign in')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: FormEvent) => {
     e.preventDefault()
-    // Here you would typically make an API call to register the user
-    console.log('Sign up attempt with:', { name, email, password, role })
-    // For demonstration purposes, we'll just show a success message
-    setSuccess('Successfully registered! Please check your email to verify your account.')
+    setLoading(true)
     setError('')
+    setSuccess('')
+    
+    try {
+      const response = await axios.post(`${API_URL}/auth/signup`, { name, email, password, role })
+      setSuccess(response.data.message || 'Successfully registered! Please check your email to verify your account.')
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'An error occurred during registration')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleForgotPassword = (e: React.FormEvent) => {
+  const handleForgotPassword = async (e: FormEvent) => {
     e.preventDefault()
-    // Here you would typically make an API call to initiate password recovery
-    console.log('Password recovery initiated for:', email)
-    // For demonstration purposes, we'll just show a success message
-    setSuccess('Password recovery email sent. Please check your inbox.')
+    setLoading(true)
     setError('')
+    setSuccess('')
+    
+    try {
+      const response = await axios.post(`${API_URL}/auth/forgot-password`, { email })
+      setSuccess(response.data.message || 'Password recovery email sent. Please check your inbox.')
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'An error occurred during password recovery')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -75,7 +111,7 @@ export default function LoginRegistration() {
                   <Input
                     id="signin-email"
                     type="email"
-                    placeholder="you..example.com"
+                    placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -93,7 +129,9 @@ export default function LoginRegistration() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button type="submit" className="w-full">Sign In</Button>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? 'Signing In...' : 'Sign In'}
+                </Button>
               </CardFooter>
             </form>
           </TabsContent>
@@ -123,7 +161,7 @@ export default function LoginRegistration() {
                   <Input
                     id="signup-email"
                     type="email"
-                    placeholder="you..example.com"
+                    placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -141,7 +179,7 @@ export default function LoginRegistration() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signup-role">Role</Label>
-                  <Select value={role} onValueChange={setRole}>
+                  <Select value={role} onValueChange={(value: UserRole) => setRole(value)}>
                     <SelectTrigger id="signup-role">
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
@@ -154,7 +192,9 @@ export default function LoginRegistration() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button type="submit" className="w-full">Sign Up</Button>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? 'Signing Up...' : 'Sign Up'}
+                </Button>
               </CardFooter>
             </form>
           </TabsContent>
@@ -174,7 +214,7 @@ export default function LoginRegistration() {
                   <Input
                     id="forgot-email"
                     type="email"
-                    placeholder="you..example.com"
+                    placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -182,7 +222,9 @@ export default function LoginRegistration() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button type="submit" className="w-full">Reset Password</Button>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? 'Submitting...' : 'Reset Password'}
+                </Button>
               </CardFooter>
             </form>
           </TabsContent>

@@ -17,22 +17,72 @@ const inventoryData = [
   // ... more items
 ]
 
+interface InventoryItem { // Define the interface for inventory items
+  id: number;
+  name: string;
+  sku: string;
+  category: string;
+  quantity: number;
+  price: number;
+}
+
 export default function InventoryManagement() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
+  const [inventoryItems, setInventoryData] = useState(inventoryData)
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [currentPage, setCurrentPage] = useState<number>(1)
   const [itemsPerPage] = useState(10)
   const [selectedItem, setSelectedItem] = useState<{ id: number; name: string; sku: string; category: string; quantity: number; price: number; } | null>(null)
+  const [name, setName] = useState('')
+  const [sku, setSku] = useState('')
+  const [category, setCategory] = useState('')
+  const [quantity, setQuantity] = useState(0)
+  const [price, setPrice] = useState(0)
+  const [editingItemId, setEditingItemId] = useState<number | null>(null)
 
-  // Display selected item details if available
-  {selectedItem && (
-    <div>
-      <h2>Selected Item: {selectedItem.name}</h2>
-      {/* Additional details can be displayed here */}
-    </div>
-  )}
+  const handleAddItem = () => {
+    const newItem = {
+      id: inventoryItems.length + 1,
+      name,
+      sku,
+      category,
+      quantity,
+      price
+    };
+    setInventoryData(prevData => [...prevData, newItem]);
+    resetForm();
+  }
+
+  const handleEditItem = () => {
+    if (editingItemId !== null) {
+      setInventoryData(prevData => 
+        prevData.map(item => 
+          item.id === editingItemId ? { ...item, name, sku, category, quantity, price } : item
+        )
+      );
+      resetForm();
+      setEditingItemId(null); // Reset editing item ID
+    }
+  }
+
+  const resetForm = () => {
+    setName('');
+    setSku('');
+    setCategory('');
+    setQuantity(0);
+    setPrice(0);
+  }
+
+  const handleEditButtonClick = (item: InventoryItem) => { // Specify the type of 'item'
+    setEditingItemId(item.id);
+    setName(item.name);
+    setSku(item.sku);
+    setCategory(item.category);
+    setQuantity(item.quantity);
+    setPrice(item.price);
+  }
 
   // Filter items based on search term
-  const filteredItems = inventoryData.filter(item =>
+  const filteredItems = inventoryItems.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.category.toLowerCase().includes(searchTerm.toLowerCase())
@@ -90,9 +140,9 @@ export default function InventoryManagement() {
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Add New Item</DialogTitle>
+                  <DialogTitle>{editingItemId ? 'Edit Item' : 'Add New Item'}</DialogTitle>
                   <DialogDescription>
-                    Enter the details of the new inventory item here.
+                    Enter the details of the inventory item here.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
@@ -100,19 +150,19 @@ export default function InventoryManagement() {
                     <Label htmlFor="name" className="text-right">
                       Name
                     </Label>
-                    <Input id="name" className="col-span-3" />
+                    <Input id="name" className="col-span-3" value={name} onChange={(e) => setName(e.target.value)} />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="sku" className="text-right">
                       SKU
                     </Label>
-                    <Input id="sku" className="col-span-3" />
+                    <Input id="sku" className="col-span-3" value={sku} onChange={(e) => setSku(e.target.value)} />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="category" className="text-right">
                       Category
                     </Label>
-                    <Select>
+                    <Select value={category} onValueChange={setCategory}>
                       <SelectTrigger className="col-span-3">
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
@@ -127,17 +177,19 @@ export default function InventoryManagement() {
                     <Label htmlFor="quantity" className="text-right">
                       Quantity
                     </Label>
-                    <Input id="quantity" type="number" className="col-span-3" />
+                    <Input id="quantity" type="number" className="col-span-3" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="price" className="text-right">
                       Price
                     </Label>
-                    <Input id="price" type="number" step="0.01" className="col-span-3" />
+                    <Input id="price" type="number" step="0.01" className="col-span-3" value={price} onChange={(e) => setPrice(Number(e.target.value))} />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button type="submit">Save changes</Button>
+                  <Button type="submit" onClick={editingItemId ? handleEditItem : handleAddItem}>
+                    {editingItemId ? 'Update Item' : 'Save changes'}
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -162,7 +214,7 @@ export default function InventoryManagement() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentItems.map((item) => (
+                  {inventoryItems.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{item.sku}</TableCell>
@@ -170,7 +222,7 @@ export default function InventoryManagement() {
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>${item.price.toFixed(2)}</TableCell>
                       <TableCell>
-                        <Button variant="ghost" size="sm" onClick={() => setSelectedItem(item)}>
+                        <Button variant="ghost" size="sm" onClick={() => handleEditButtonClick(item)}>
                           <Edit className="h-4 w-4" />
                         </Button>
                       </TableCell>
@@ -236,7 +288,7 @@ export default function InventoryManagement() {
                     <SelectValue placeholder="Select item" />
                   </SelectTrigger>
                   <SelectContent>
-                    {inventoryData.map((item) => (
+                    {inventoryItems.map((item) => (
                       <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
                     ))}
                   </SelectContent>
