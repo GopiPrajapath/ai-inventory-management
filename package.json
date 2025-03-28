@@ -1,0 +1,13 @@
+{
+    "name": "myInventoryManagementApp",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "start": "concurrently \"npm run frontend\" \"npm run backend\"",
+        "frontend": "cd frontend && npm run dev",
+        "backend": "cd backend && npm run dev"
+    },
+    "devDependencies": {
+        "concurrently": "^7.6.0"
+    }
+}
