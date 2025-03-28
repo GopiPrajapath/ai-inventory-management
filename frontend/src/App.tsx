@@ -27,7 +27,7 @@ function App() {
         <Route path="/alerts" element={<AlertsAndNotifications />} />
         <Route path="/analytics" element={<AnalyticsAndReports />} />
         <Route path="/Settings" element ={<Settings/>}/>
-        <Route path="/login" element={<LoginRegistration />} />
+        <Route path="/login" element={<LoginRegistration/>} />
         <Route path="/help" element={<HelpAndSupport />} />
         <Route path="/about" element={<About />} />
         <Route path="/orders" element={<OrderManagement/>}/>
